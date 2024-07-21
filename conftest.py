@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from utils import attach
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(scope='session', autouse=True)
 def load_env():
     load_dotenv()
 
