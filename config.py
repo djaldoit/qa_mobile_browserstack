@@ -1,5 +1,16 @@
 import os
+from dotenv import load_dotenv
+from utils import path
+from pydantic_settings import BaseSettings
 
-context = os.getenv('context', 'bstack')
-bstack_userName = os.getenv('bstack_userName')
-bstack_accessKey = os.getenv('bstack_accessKey')
+load_dotenv()
+
+
+class Config(BaseSettings):
+    USER_NAME: str = os.getenv('USER_NAME')
+    ACCESS_KEY: str = os.getenv('ACCESS_KEY')
+    URL: str = os.getenv('URL')
+    TIMEOUT: float = os.getenv('TIMEOUT')
+
+
+config = Config(_env_file=path.relative_from_root(f'.env.{Config()}'))

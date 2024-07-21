@@ -3,9 +3,15 @@ import pytest
 from appium.options.android import UiAutomator2Options
 from selene import browser
 import config
-import os
-from selene_in_action import utils
 from appium import webdriver
+from dotenv import load_dotenv
+
+from utils import attach
+
+
+@pytest.fixture(autouse=True)
+def load_env():
+    load_dotenv()
 
 
 @pytest.fixture(scope='function', autouse=True)
@@ -25,8 +31,8 @@ def mobile_management():
                 "buildName": "browserstack-build-1",
                 "sessionName": "BStack first_test",
 
-                "userName": config.bstack_userName,
-                "accessKey": config.bstack_accessKey,
+                "userName": config.Config.USER_NAME,
+                "accessKey": config.Config.ACCESS_KEY,
             }
         })
 
@@ -36,27 +42,13 @@ def mobile_management():
             options=options
         )
 
-    browser.config.timeout = float(os.getenv('timeout', '10.0'))
+    browser.config.driver = webdriver.Remote(config.Config.URL, options=options)
+    browser.config.timeout = config.Config.TIMEOUT
 
     yield
 
-    allure.attach(
-        browser.driver.get_screenshot_as_png(),
-        name='screenshot',
-        attachment_type=allure.attachment_type.PNG,
-    )
-
-    allure.attach(
-        browser.driver.page_source,
-        name='screen xml dump',
-        attachment_type=allure.attachment_type.XML,
-    )
-
-    session_id = browser.driver.session_id
-
-    with allure.step('tear down app session'):
-        browser.quit()
-
-    utils.allure.attach_bstack_video(session_id)
+    attach.add_screenshot(browser)
+    attach.add_html(browser)
+    attach.add_video(browser)
 
 
