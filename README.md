@@ -1,1 +1,1 @@
-# qa_mobile_browserstack
+# qa_mobile_browserstack_android
