@@ -1,6 +1,12 @@
 import allure
+import requests
 import os
-from allure_commons.types import AttachmentType
+from dotenv import load_dotenv
+
+
+load_dotenv()
+user_name = os.getenv("USERNAME")
+access_key = os.getenv("ACCESS-KEY")
 
 
 def add_screenshot(browser):
@@ -14,11 +20,6 @@ def add_html(browser):
 
 
 def add_video(session_id):
-
-    user_name = os.getenv('USER_NAME')
-    access_key = os.getenv('ACCESS_KEY')
-
-    import requests
     bstack_session = requests.get(
         f'https://api.browserstack.com/app-automate/sessions/{session_id}.json',
         auth=(user_name, access_key),

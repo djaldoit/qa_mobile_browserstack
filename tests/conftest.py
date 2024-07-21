@@ -1,11 +1,10 @@
 import allure
 import pytest
 from appium.options.android import UiAutomator2Options
-from selene import browser
-import config
 from appium import webdriver
+from selene import browser
+import os
 from dotenv import load_dotenv
-
 from utils import attach
 
 
@@ -17,6 +16,8 @@ def load_env():
 @pytest.fixture(scope='function', autouse=True)
 def mobile_management():
     with allure.step('Configurate options'):
+        user_name = os.getenv("USERNAME")
+        access_key = os.getenv("ACCESS-KEY")
         options = UiAutomator2Options().load_capabilities({
             "platformName": "android",
             "platformVersion": "10.0",
@@ -31,8 +32,8 @@ def mobile_management():
                 "buildName": "browserstack-build-1",
                 "sessionName": "BStack first_test",
 
-                "userName": config.Config.USER_NAME,
-                "accessKey": config.Config.ACCESS_KEY,
+                "userName": user_name,
+                "accessKey": access_key,
             }
         })
 
@@ -42,8 +43,9 @@ def mobile_management():
             options=options
         )
 
-    browser.config.driver = webdriver.Remote(config.Config.URL, options=options)
-    browser.config.timeout = config.Config.TIMEOUT
+    browser.config.driver = webdriver.Remote('http://hub.browserstack.com/wd/hub',
+                                             options=options)
+    browser.config.timeout = float(os.getenv("TIMEOUT"))
 
     yield
 
