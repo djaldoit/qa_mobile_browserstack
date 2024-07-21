@@ -16,8 +16,8 @@ def load_env():
 @pytest.fixture(scope='function', autouse=True)
 def mobile_management():
     with allure.step('Configurate options'):
-        user_name = os.getenv("USERNAME")
-        access_key = os.getenv("ACCESS-KEY")
+        user_name = os.getenv("USER_NAME")
+        access_key = os.getenv("ACCESS_KEY")
         options = UiAutomator2Options().load_capabilities({
             "platformName": "android",
             "platformVersion": "10.0",
