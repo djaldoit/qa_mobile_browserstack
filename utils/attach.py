@@ -5,18 +5,22 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
-user_name = os.getenv("USERNAME")
-access_key = os.getenv("ACCESS-KEY")
+user_name = os.getenv("USER_NAME")
+access_key = os.getenv("ACCESS_KEY")
 
 
 def add_screenshot(browser):
     png = browser.driver.get_screenshot_as_png()
-    allure.attach(body=png, name='screenshot', attachment_type=AttachmentType.PNG, extension='.png')
+    allure.attach(body=png,
+                  name='Screenshot',
+                  attachment_type=allure.attachment_type.PNG)
 
 
-def add_html(browser):
-    html = browser.driver.page_source
-    allure.attach(html, name='page_source', attachment_type=AttachmentType.XML)
+def add_xml(browser):
+    xml_dump = browser.driver.page_source
+    allure.attach(body=xml_dump,
+                  name='XML screen',
+                  attachment_type=allure.attachment_type.XML)
 
 
 def add_video(session_id):
