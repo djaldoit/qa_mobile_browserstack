@@ -1,9 +1,10 @@
 import allure
 import pytest
+import os
+
 from appium.options.android import UiAutomator2Options
 from appium import webdriver
 from selene import browser
-import os
 from dotenv import load_dotenv
 from utils import attach
 
@@ -38,19 +39,17 @@ def mobile_management():
         })
 
     with allure.step('init app session'):
-        browser.config.driver = webdriver.Remote(
-            'http://hub.browserstack.com/wd/hub',
-            options=options
-        )
-
-    browser.config.driver = webdriver.Remote('http://hub.browserstack.com/wd/hub',
-                                             options=options)
-    browser.config.timeout = float(os.getenv("TIMEOUT"))
+        browser.config.driver = webdriver.Remote('http://hub.browserstack.com/wd/hub',
+                                                 options=options)
+        browser.config.timeout = float(os.getenv("TIMEOUT"))
 
     yield
 
     attach.add_screenshot(browser)
     attach.add_xml(browser)
     attach.add_video(browser)
+
+    with allure.step('Close app session'):
+        browser.quit()
 
 
