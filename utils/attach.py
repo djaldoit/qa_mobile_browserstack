@@ -23,13 +23,12 @@ def add_xml(browser):
                   attachment_type=allure.attachment_type.XML)
 
 
-def add_video(session_id):
-    bstack_session = requests.get(
-        f'https://api.browserstack.com/app-automate/sessions/{session_id}.json',
-        auth=(user_name, access_key),
+def add_video(browser):
+    browserstack_session = requests.get(
+        url=f'https://api.browserstack.com/app-automate/sessions/{browser.driver.session_id}.json',
+        auth=(user_name, access_key)
     ).json()
-    print(bstack_session)
-    video_url = bstack_session['automation_session']['video_url']
+    video_url = browserstack_session['automation_session'].get('video_url')
 
     allure.attach(
         '<html><body>'
