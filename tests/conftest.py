@@ -1,8 +1,7 @@
 import allure
 import pytest
 from appium.options.android import UiAutomator2Options
-from selene import browser, support
-import allure_commons
+from selene import browser
 import config
 import os
 from selene_in_action import utils
@@ -38,10 +37,6 @@ def mobile_management():
         )
 
     browser.config.timeout = float(os.getenv('timeout', '10.0'))
-
-    browser.config._wait_decorator = support._logging.wait_with(
-        context=allure_commons._allure.StepContext
-    )
 
     yield
 
